@@ -1,0 +1,55 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# -----------------------------------------
+# 1) Generating Noisy Linear Data
+# -----------------------------------------
+np.random.seed(1)
+
+X = np.arange(1, 201)                     # input values
+noise = np.random.uniform(-20, 20, 200)   # random noise
+Y = 3 * X + noise                         # linear relation with noise
+
+X = X.reshape(-1, 1)
+
+print("First 5 X values:\n", X[:5])
+print("First 5 Y values:\n", Y[:5])
+
+# -----------------------------------------
+# 2) Training Linear Regression Model
+# -----------------------------------------
+regressor = LinearRegression()
+regressor.fit(X, Y)
+
+print("\nCoefficient (Slope):", regressor.coef_[0])
+print("Intercept (Bias):", regressor.intercept_)
+print("Prediction for X = 50:", regressor.predict([[50]])[0])
+
+# -----------------------------------------
+# 3) Plotting Data and Regression Line
+# -----------------------------------------
+plt.figure(figsize=(9, 5))
+
+# Data points (green)
+plt.scatter(X, Y, color='green', s=25, alpha=0.8, label='Data Points')
+
+# Regression line (blue)
+plt.plot(X, regressor.predict(X),
+         color='blue', linewidth=2.5,
+         label='Regression Line')
+
+plt.title('Linear Regression Model Visualization')
+plt.xlabel('Input Variable (X)')
+plt.ylabel('Target Variable (Y)')
+plt.legend()
+plt.grid(alpha=0.3)
+plt.show()
+
+# -----------------------------------------
+# 4) Calculating Mean Absolute Error (MAE)
+# -----------------------------------------
+predictions = regressor.predict(X)
+mae = np.mean(np.abs(Y - predictions))
+
+print("Mean Absolute Error (MAE):", mae)
